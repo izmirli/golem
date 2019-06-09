@@ -3,9 +3,10 @@ from flask import Flask, request, send_from_directory
 
 
 app = Flask(__name__)
+app.debug = True
 
 config = configparser.ConfigParser()
-config.read('golem.ini')
+config.read(app.root_path + '/golem.ini')
 
 
 @app.route('/', methods=['GET'])
