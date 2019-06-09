@@ -28,17 +28,20 @@ def handle_message():
     data = request.get_json()
     print(f'handle_message data:', data)
 
-    if data["object"] == "page":
-        for entry in data["entry"]:
-            for messaging_event in entry["messaging"]:
-                if messaging_event.get("message"):  
-                    sender_id = messaging_event["sender"]["id"]        
-                    message_text = messaging_event["message"]["text"]
-                    # recipient_id = messaging_event["recipient"]["id"]
-                    # msg_timestamp = messaging_event["timestamp"]
-                    # msg_id = messaging_event["message"]["mid"]
-                    # msg_seq = messaging_event["message"]["seq"]
-                    send_message_response(sender_id, parse_user_message(message_text))
+    try:
+        if data["object"] == "page":
+            for entry in data["entry"]:
+                for messaging_event in entry["messaging"]:
+                    if messaging_event.get("message"):
+                        sender_id = messaging_event["sender"]["id"]
+                        message_text = messaging_event["message"]["text"]
+                        # recipient_id = messaging_event["recipient"]["id"]
+                        # msg_timestamp = messaging_event["timestamp"]
+                        # msg_id = messaging_event["message"]["mid"]
+                        # msg_seq = messaging_event["message"]["seq"]
+                        send_message_response(sender_id, parse_user_message(message_text))
+    except KeyError as e:
+        print(f'KeyError exception: {e}')
 
     return "ok"
 
