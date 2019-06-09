@@ -55,16 +55,18 @@ def send_message(sender_id, message_text):
                       headers={"Content-Type": "application/json"},
                       data=json.dumps({
                           "recipient": {"id": sender_id},
-                          "message": {"text": message_text}
-                          "quick_replies": [
-                              {
-                                  "content_type": "text",
-                                  "title": "Search",
-                                  "payload": "<POSTBACK_PAYLOAD>",
-                                  "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Blue_Question.svg"
-                              },
-                              {"content_type":"location"}
-                          ]
+                          "message": {
+                              "text": message_text,
+                              "quick_replies": [
+                                  {
+                                      "content_type": "text",
+                                      "title": "Search",
+                                      "payload": "<POSTBACK_PAYLOAD>",
+                                      "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Blue_Question.svg"
+                                  },
+                                  {"content_type": "location"}
+                              ],
+                          }
                       }))
     # consider adding to data "messaging_type": "<MESSAGING_TYPE>",
     # MESSAGING_TYPE options: RESPONSE (default), UPDATE (proactive send), MESSAGE_TAG.
