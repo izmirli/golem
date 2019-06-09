@@ -26,15 +26,19 @@ def handle_verification():
 def handle_message():
     """Handle messages sent by facebook messenger to the application."""
     data = request.get_json()
+    print(f'handle_message data:', data)
 
     if data["object"] == "page":
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  
                     sender_id = messaging_event["sender"]["id"]        
-                    recipient_id = messaging_event["recipient"]["id"]  
-                    message_text = messaging_event["message"]["text"]  
-                    send_message_response(sender_id, parse_user_message(message_text)) 
+                    message_text = messaging_event["message"]["text"]
+                    # recipient_id = messaging_event["recipient"]["id"]
+                    # msg_timestamp = messaging_event["timestamp"]
+                    # msg_id = messaging_event["message"]["mid"]
+                    # msg_seq = messaging_event["message"]["seq"]
+                    send_message_response(sender_id, parse_user_message(message_text))
 
     return "ok"
 
@@ -52,7 +56,18 @@ def send_message(sender_id, message_text):
                       data=json.dumps({
                           "recipient": {"id": sender_id},
                           "message": {"text": message_text}
+                          "quick_replies": [
+                              {
+                                  "content_type": "text",
+                                  "title": "Search",
+                                  "payload": "<POSTBACK_PAYLOAD>",
+                                  "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Blue_Question.svg"
+                              },
+                              {"content_type":"location"}
+                          ]
                       }))
+    # consider adding to data "messaging_type": "<MESSAGING_TYPE>",
+    # MESSAGING_TYPE options: RESPONSE (default), UPDATE (proactive send), MESSAGE_TAG.
 
 
 def parse_user_message(user_text):
