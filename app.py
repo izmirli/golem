@@ -1,12 +1,15 @@
-import sys, json, requests, configparser
+import json
+import requests
+from configparser import ConfigParser
 from flask import Flask, request, send_from_directory
 
 
 app = Flask(__name__)
 app.debug = True
 
-config = configparser.ConfigParser()
+config: ConfigParser = ConfigParser()
 config.read(app.root_path + '/golem.ini')
+app.logger.debug(f'configuration from golem.ini:', config)
 
 
 @app.route('/', methods=['GET'])
@@ -16,6 +19,7 @@ def handle_verification():
     """
     if request.args.get('hub.verify_token', '') == config['TOKENS']['VERIFY_TOKEN']:
         print("successfully verified")
+        app.logger.debug(f'successfully verified. challenge:', request.args.get('hub.challenge', ''))
         return request.args.get('hub.challenge', '')
     else:
         print("Wrong verification token!")
