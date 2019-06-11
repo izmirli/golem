@@ -9,7 +9,11 @@ app.debug = True
 
 config: ConfigParser = ConfigParser()
 config.read(app.root_path + '/golem.ini')
-app.logger.debug(f'configuration from golem.ini:', config)
+app.logger.debug('configuration from golem.ini:\n%s', '\n'.join(
+    sorted(
+        [f'{s}::{k}: {v}' for s in config.sections() for k, v in config.items(s)]
+    )
+))
 
 
 @app.route('/', methods=['GET'])
@@ -17,9 +21,10 @@ def handle_verification():
     """Verifies facebook webhook subscription
     Successful when verify_token is same as token sent by facebook app
     """
+    app.logger.debug('request.args: %s', request.args)
     if request.args.get('hub.verify_token', '') == config['TOKENS']['VERIFY_TOKEN']:
-        print("successfully verified")
-        app.logger.debug(f'successfully verified. challenge:', request.args.get('hub.challenge', ''))
+        # print("successfully verified")
+        app.logger.debug(f'successfully verified. challenge: %s', request.args.get('hub.challenge', ''))
         return request.args.get('hub.challenge', '')
     else:
         print("Wrong verification token!")
