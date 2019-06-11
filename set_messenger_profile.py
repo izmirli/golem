@@ -3,12 +3,14 @@ import json
 import requests
 import logging
 from configparser import ConfigParser
+from flask.logging import default_handler
 
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
-logging.basicConfig(filename='/var/log/golem.log', format='%(asctime)s [%(name)s::%(levelname)s] %(message)s')
+# filename='/var/log/golem.log',
+logging.basicConfig(format='%(asctime)s [%(name)s::%(levelname)s] %(message)s')
 logger = logging.getLogger('golem')
+logger.addHandler(default_handler)
 my_debug = 5
 
 if 1 <= my_debug:
@@ -29,7 +31,7 @@ def main():
         "greeting": [
             {
                 "locale": "default",
-                "text": "שלום, אני נוסעת"
+                "text": "גולם המיועד לחבר בין אנשים המעוניינים בזה"
             }
         ],
         "get_started": {

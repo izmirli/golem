@@ -44,16 +44,19 @@ def handle_message():
     try:
         if data["object"] == "page":
             for entry in data["entry"]:
+                # recipient_id = messaging_event["id"]
                 for messaging_event in entry["messaging"]:
+                    sender_id = messaging_event["sender"]["id"]
+                    # msg_timestamp = messaging_event["timestamp"]
                     if messaging_event.get("message"):
-                        sender_id = messaging_event["sender"]["id"]
                         message_text = messaging_event["message"]["text"]
-                        # recipient_id = messaging_event["recipient"]["id"]
-                        # msg_timestamp = messaging_event["timestamp"]
                         # msg_id = messaging_event["message"]["mid"]
                         # msg_seq = messaging_event["message"]["seq"]
-                        get_sender_info(sender_id)
                         send_message_response(sender_id, parse_user_message(message_text))
+                    if messaging_event.get("postback"):
+                        postback_payload = messaging_event["postback"]["payload"]
+                        if 'GET_STARTED_PAYLOAD' == postback_payload:
+                            get_sender_info(sender_id)
     except KeyError as e:
         print(f'KeyError exception: {e}')
 
