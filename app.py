@@ -100,7 +100,7 @@ def get_sender_info(psid):
     :param psid: PSID (sender's Page-scoped ID).
     :return:
     """
-    response = requests.post(
+    response = requests.get(
         f'https://graph.facebook.com/{psid}',
         params={"access_token": config['TOKENS']['PAGE_ACCESS_TOKEN'],
                 "fields": "name,first_name,last_name,profile_pic,gender"},
