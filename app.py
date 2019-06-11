@@ -67,7 +67,7 @@ def static_from_root():
 
 def send_message(sender_id, message_text):
     """Sending response back to the user using facebook graph API"""
-    r = requests.post(config['API']['SendMessageUrl'],
+    r = requests.post(config['API']['Messages'],
                       params={"access_token": config['TOKENS']['PAGE_ACCESS_TOKEN']},
                       headers={"Content-Type": "application/json"},
                       data=json.dumps({
